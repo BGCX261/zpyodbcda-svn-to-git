@@ -1,0 +1,17 @@
+1.0.7 fixed:
+    * database connection fails using pyodbc 2.1.4 
+(starting from this version, source code has been uploaded to google SVN. )
+
+1.0.6 fixed:
+
+    * code optimization 
+
+1.0.5 fixed:
+
+    * fix crash in 1.0.4
+    * improved some coding 
+
+1.0.4 fixed:
+
+    * Typo found in pyodbcconnectionTestForm.dtml
+    * datetime.date values should be converted to DateTime? objects 

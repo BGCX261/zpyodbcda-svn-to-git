@@ -1,0 +1,9 @@
+#Auto move your mouse to prevent your screen being locked after idling a certain time.
+
+= Introduction =
+完全免费的小软件，MouseMove，每隔170秒会自动帮你动一下鼠标，这样你就可以长时间放映电影或者PPT presentation了。
+
+
+= Details =
+
+下载地址是 http://code.google.com/p/zpyodbcda/downloads/list 里面下载MouseMove.zip 

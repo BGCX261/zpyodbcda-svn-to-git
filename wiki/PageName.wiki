@@ -1,0 +1,75 @@
+{{{
+
+		
+	def query(self,ps_queryString, pl_maxRows=None):
+		o_desc = None
+		o_result = ()
+		o_items = []
+		max_rows = pl_maxRows
+		if pl_maxRows == None:
+			max_rows = self._MaxRows
+			
+		self._register()
+		#ps_queryString = replace(ps_queryString,"\n"," ")  #This seems not necessary and sometimes breaks certain SQLs.
+		
+		o_cur = self._cursor()		
+		try:
+			o_ret = o_cur.execute(ps_queryString)
+		except:
+			o_cur.close()
+			self._conx.close()
+			self._conx = pyodbc.connect(self._conxString,self._auto_commit)
+			self._cursor = self._conx.cursor
+			o_cur = self._cursor()
+			o_ret = o_cur.execute(ps_queryString)
+			
+			
+		
+		o_desc = o_cur.description
+		if o_desc:
+			o_result = o_cur.fetchmany(max_rows)
+		o_cur.close()
+	
+			
+		if o_desc is None: return (),()
+
+		o_items = map(lambda x:{'name':x[0],'type':x[1],'dsize':x[2],'isize':x[3],'precision':x[4],'scale':x[5],'null':x[6]}, o_desc)
+		
+		# convert pyodbc's datetime.datetime object into Zope's DateTime.DateTime object.
+ 		if datetime.datetime in [i['type'] for i in o_items] or datetime.date in [i['type'] for i in o_items]:
+			o_result = self._munge_datetime_results(o_items,o_result)
+			
+		# convert pyodbc's Decimal object into float object.
+		if float in [i['type'] for i in o_items]:
+			o_result = self._munge_Decimal_results(o_items,o_result)
+			
+			
+		return o_items,o_result
+
+	def _munge_Decimal_results(self, items, results):
+		if not results or not items:
+			return results
+		dtmap = [i['type'] == float for i in items]
+		#[False, False, False, True, True, False]
+		return [tuple([self._Decimal_convert(*r) for r in zip(dtmap, row)]) for row in results]
+		
+	def _Decimal_convert(self, dt, val):
+		if dt and (val!=None):
+			return float(val)
+		return val
+		
+	def _munge_datetime_results(self, items, results):
+		if not results or not items:
+			return results
+		dtmap = [i['type'] in [datetime.datetime, datetime.date] for i in items]
+		#[False, False, False, True, True, False]
+		return [tuple([self._datetime_convert(*r) for r in zip(dtmap, row)]) for row in results]
+				
+	def _datetime_convert(self, dt, val):
+		if dt and (val!=None):
+			# Currently we don't do timezones. Everything is UTC.
+			# Ideally we'd get the current Oracle timezone and use that.
+			x = val.timetuple()[:6] + ('UTC',)
+			return DateTime(*x) 
+		return val
+}}}

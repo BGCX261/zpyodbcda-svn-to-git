@@ -1,0 +1,29 @@
+#labels Featured
+= ZPyODBCDA =
+
+  基于pyodbc的Zope Database Adapter - ZPyODBCDA。 兼容于Plone 3 和 Plone 4！
+
+= Introduction =
+
+  在Zope.org上有个免费的New ZODBCDA， 但我个人感觉它所用的Pywin32的ODBC模块似乎不太稳定，有时候出错会把我的Python程序给终止掉。
+
+  还有一个mxDA就是商业产品了，所以我想还是试试写基于一个GPL授权的吧。
+
+  这个新的DA是基于pyodbc的，我也参照了另一个用于连接PostgreSQL的ZPoPyDA的很多GPL代码。
+
+
+= Details =
+
+
+  如果你的Zope是运行在Win32平台上的，而且Python的版本是2.4或者2.6的话，直接把这个ZPyODBCDA的目录放在Products目录下面应该就可以使用了，因为我把pyodbc的编译版本放在安装目录里面了；如果是在Linux等其他平台上的话，你可能需要为你的Python安装pyodbc模块后才能使用。
+
+
+
+
+  可以到 http://code.google.com/p/zpyodbcda 下载，发现有任何问题的话可以联系我。
+
+  希望这个DA能为大家提供一个较为稳定的Zope-ODBC连接。
+
+  Henry Zhou 
+
+  Jiangwen365 爱 gmail 点 com 
